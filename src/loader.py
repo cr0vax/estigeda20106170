@@ -4,7 +4,7 @@ from connected_components import ConnectedComponents
 # LOADER
 def main():
     # global parameters
-    original_image_name = "ace.jpg"
+    original_image_name = "wiki.png"
 
     # identify image regions using connected components algorithm
     cc = ConnectedComponents(original_image_name)
