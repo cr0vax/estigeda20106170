@@ -6,15 +6,23 @@ class Linked:
         pass
     pass
 
+    #----------------------------------
+    # joins sets of identified neighbors
+    #
+    # label_to_find - label to be found
+    # return        - minimum equivalent label for the label to be found
+    #----------------------------------
     def find(self, label_to_find):
         return min(self.equivalences[label_to_find - 1])
         pass
     pass
 
-##    function MakeSet(x)
-##    x.parent := x
+    #----------------------------------
+    # create a new set
+    #
+    # label_to_add  - label to be added
+    #----------------------------------
     def make_set(self, label_to_add):
-##        print 'make_set'
 
         # create new set with element label_to_add
         new_set = set()
@@ -26,32 +34,22 @@ class Linked:
         pass
     pass
 
-##    function Union(x, y)
-##        xRoot := Find(x)
-##        yRoot := Find(y)
-##        xRoot.parent := yRoot
-##
-    def union(self, min_label, neighbors):
+    #----------------------------------
+    # joins sets of identified neighbors
+    #
+    # neighbors     - set containing neighbor labels found
+    #----------------------------------
+    def union(self, neighbors):
+        # prepare set of labels
         new_set = set()
 
         # build new set with neighbor elements
         for n in neighbors:
-            new_set.add(n)
+            new_set.update(self.equivalences[n-1])
 
-        for n in neighbors:
+        # add set to all identified labels
+        for n in new_set:
             self.equivalences[n-1].update(new_set)
-        
-        # add elements to equivalences
-##        self.equivalences[min_label-1].update(new_set)
-##        self.equivalences[max(neighbors) - 1].update(new_set)
-
-##        if max(neighbors) == 7:
-##            print 'Linked.union'
-##            print neighbors
-##            print min_label
-##            print new_set
-##            print self.equivalences
-
         pass
     pass
 
