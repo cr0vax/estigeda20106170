@@ -25,7 +25,7 @@ class ConnectedComponents:
     pass
 
     def identify_components(self):
-        print 'identify_components'
+##        print 'identify_components'
 
         # first pass
         self.first_pass()
@@ -52,7 +52,7 @@ class ConnectedComponents:
     # runs first pass to detect connected components
     #----------------------------------
     def first_pass(self):
-        print 'first_pass'
+##        print 'first_pass'
 
         # Labels index starting at 1
         nextLabel = 1
@@ -63,7 +63,7 @@ class ConnectedComponents:
 
                 # check if pixel is background
                 r, g, b = self.original_image.getpixel(pixel)
-                background = (r + g + b > 100)
+                background = int((r + g + b) / (3.0)) > 200
 
                 # if it's not background
                 if (background is False):
@@ -94,7 +94,7 @@ class ConnectedComponents:
     # runs second pass to connect connected sets
     #----------------------------------
     def second_pass(self):
-        print 'second_pass'
+##        print 'second_pass'
 
         for line in range(self.image_lines):
             for column in range(self.image_columns):
@@ -112,7 +112,7 @@ class ConnectedComponents:
     # save image
     #----------------------------------
     def save_image(self):
-        print 'save_image'
+##        print 'save_image'
 
         rnd = random.randint
         
@@ -133,7 +133,7 @@ class ConnectedComponents:
         pass
     
         # save image
-        destination_image.save(self.saved_image_name)
+##        destination_image.save(self.saved_image_name)
 
     pass
 
