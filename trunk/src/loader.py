@@ -5,9 +5,9 @@ import time
 # LOADER
 def main():
     # global parameters
-    original_image_name = ["cat-getImg.php.jpg",
-                           "ace.jpg",
-                           "alicate.jpg"]
+    original_image_name = ["Silver Ball Bearings.jpg"]
+##                           "ace.jpg",
+##                           "alicate.jpg"]
 
     # identify image regions using connected components algorithm
     lista = []
@@ -15,7 +15,7 @@ def main():
     for a in range(len(original_image_name)):
         print original_image_name[a]
         
-        for i in range(10):
+        for i in range(1):
             start = time.clock()
             cc = ConnectedComponents(original_image_name[a])
             cc.identify_components()
