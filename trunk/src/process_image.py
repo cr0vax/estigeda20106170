@@ -59,7 +59,7 @@ class ProcessImage:
         rnd = random.randint
         
         # generate label colors
-        labelColors = [(rnd(0, 255), rnd(0, 255), rnd(0, 255)) for l in range(0,  self.total_labels - 1)]
+        labelColors = [(rnd(0, 255), rnd(0, 255), rnd(0, 255)) for l in range(0,  self.total_labels)]
 
         # create destination image
         destination_image = Image.new("RGB", (self.image_columns, self.image_lines))
@@ -68,7 +68,9 @@ class ProcessImage:
         for line in range(self.image_lines):
             for column in range(self.image_columns):                
                 if self.labels[line][column] != 0:
-                    destination_image.putpixel((column, line), labelColors[self.labels[line][column]- 1])
+                    
+##                    destination_image.putpixel((column, line), (255, 0, 0))
+                    destination_image.putpixel((column, line), labelColors[self.labels[line][column].get_label() - 1])
                 pass
             pass
         pass
