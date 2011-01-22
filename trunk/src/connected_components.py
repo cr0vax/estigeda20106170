@@ -1,29 +1,58 @@
-import random
-import Image
+# -*- coding: utf-8 -*-
 from linked import Linked
 
 class ConnectedComponents:
 
-    def __init__(self, original_image_name):
+    #----------------------------------
+    # connected components constructor
+    #----------------------------------
+    def __init__(self, original_image):
 
-        # parameters
-        self.original_image = Image.open(original_image_name)           # original image
-        filename, extension = original_image_name.split(".", 1)         # filename and extension
-        self.saved_image_name = filename + '_altered.png'               # saved filename
+        # image
+        self.image = original_image
 
         # image measures
-        self.image_columns = self.original_image.size[0]                # columns
-        self.image_lines = self.original_image.size[1]                  # lines
+        self.image_columns = self.image.size[0]                # columns
+        self.image_lines = self.image.size[1]                  # lines
+
+        # initilize not background counter
+        self.not_background_pixels = 0
 
         # initialize labels matrix
         self.labels = [[0 for col in range(self.image_columns)] for row in range(self.image_lines)]
 
         # initialize label equivalences
         self.equivalences = Linked()
+
+        # identify components
+        self.identify_components()
     pass
 
+    #----------------------------------
+    # return labels
+    #----------------------------------
+    def get_labels(self):
+        return self.labels
+    pass
+
+    #----------------------------------
+    # return total labels identified
+    #----------------------------------
+    def get_total_labels(self):
+        return self.nextLabel
+    pass
+
+    #----------------------------------
+    # return not background pixels
+    #----------------------------------
+    def get_not_background_pixels(self):
+        return self.not_background_pixels
+    pass
+
+    #----------------------------------
+    # Identify components of the image
+    #----------------------------------
     def identify_components(self):
-##        print 'identify_components'
 
         # first pass
         self.first_pass()
@@ -31,19 +60,15 @@ class ConnectedComponents:
         # second pass
         self.second_pass()
 
-        # save image
-        self.save_image()
-
     pass
         
     #----------------------------------
     # runs first pass to detect connected components
     #----------------------------------
     def first_pass(self):
-##        print 'first_pass'
 
         # Labels index starting at 1
-        nextLabel = 1
+        self.nextLabel = 1
 
         for line in range(self.image_lines):
             l = line
@@ -52,11 +77,13 @@ class ConnectedComponents:
                 pixel = (c, l)
 
                 # check if pixel is background
-                r, g, b = self.original_image.getpixel(pixel)
+                r, g, b = self.image.getpixel(pixel)
                 background = int((r + g + b) / (3.0)) > 200
 
                 # if it's not background
                 if (background is False):
+                    # increment not background pixels counter
+                    self.not_background_pixels = self.not_background_pixels + 1
 
                     # check if there are neighbors
                     neighbor_labels = self.has_neighbors(l, c)
@@ -65,9 +92,9 @@ class ConnectedComponents:
                     if len(neighbor_labels) == 0:
                         
                         # create label set
-                        self.equivalences.make_set(nextLabel)
-                        self.labels[l][c] = nextLabel
-                        nextLabel = nextLabel + 1
+                        self.equivalences.make_set(self.nextLabel)
+                        self.labels[l][c] = self.nextLabel
+                        self.nextLabel = self.nextLabel + 1
                     else:
                         
                         # neighbors were found
@@ -84,7 +111,6 @@ class ConnectedComponents:
     # runs second pass to connect connected sets
     #----------------------------------
     def second_pass(self):
-##        print 'second_pass'
 
         for line in range(self.image_lines):
             for column in range(self.image_columns):
@@ -96,35 +122,6 @@ class ConnectedComponents:
                 pass
             pass
         pass
-    pass
-
-    #----------------------------------
-    # save image
-    #----------------------------------
-    def save_image(self):
-##        print 'save_image'
-
-        rnd = random.randint
-        
-        # generate label colors
-        labelColors = [(rnd(0, 255), rnd(0, 255), rnd(0, 255)) for l in range(0,  len(self.labels) + 10)]
-
-        destination_image = Image.new("RGB", (self.image_columns, self.image_lines))
-        
-        # put pixels in image
-        for line in range(self.image_lines):
-            for column in range(self.image_columns):                
-                if self.labels[line][column] != 0:
-##                    destination_image.putpixel((column, line), ((self.labels[line][column] * 100), (self.labels[line][column] * 100), (self.labels[line][column] * 100)) )
-                    destination_image.putpixel((column, line), labelColors[self.labels[line][column]- 1])
-
-                pass
-            pass
-        pass
-    
-        # save image
-        destination_image.save(self.saved_image_name)
-
     pass
 
     #----------------------------------
@@ -158,9 +155,9 @@ class ConnectedComponents:
             if neighbor_N != 0:
                 neighbor_labels.add(neighbor_N)
 
-            # previouse column
+            # previous column
             if (previous_column >= 0):
-                neighbor_NW = self.labels[above_line][previous_column]
+                neighbor_NW = self.labels[above_line][previous_column]  # neighbor_NW
                 if neighbor_NW != 0:
                     neighbor_labels.add(neighbor_NW)
                     pass

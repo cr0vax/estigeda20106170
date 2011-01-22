@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Linked:
 
     def __init__(self):
