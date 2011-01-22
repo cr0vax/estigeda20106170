@@ -100,7 +100,9 @@ class ConnectedComponents:
                         # neighbors were found
                         min_label = min(neighbor_labels)            # get the smaller neighbor
                         self.labels[l][c] = min_label               # mark current record in matrix as min label
-                        self.equivalences.union(neighbor_labels)
+
+                        for i in neighbor_labels:
+                            self.equivalences.union(min_label, i)
                     pass
                 pass
             pass
@@ -118,7 +120,7 @@ class ConnectedComponents:
                 # not background
                 if self.labels[line][column] != 0:
                     # set label with the minimum equivalence
-                    self.labels[line][column] = self.equivalences.find(self.labels[line][column])
+                    self.labels[line][column] = self.equivalences.find_minimum(self.labels[line][column])
                 pass
             pass
         pass

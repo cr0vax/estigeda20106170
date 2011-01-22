@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from label import Label
+
 class Linked:
 
     def __init__(self):
@@ -7,16 +9,6 @@ class Linked:
         pass
     pass
 
-    #----------------------------------
-    # joins sets of identified neighbors
-    #
-    # label_to_find - label to be found
-    # return        - minimum equivalent label for the label to be found
-    #----------------------------------
-    def find(self, label_to_find):
-        return min(self.equivalences[label_to_find - 1])
-        pass
-    pass
 
     #----------------------------------
     # create a new set
@@ -26,11 +18,10 @@ class Linked:
     def make_set(self, label_to_add):
 
         # create new set with element label_to_add
-        new_set = set()
-        new_set.add(label_to_add)
+        lbl = Label(label_to_add, 0)
 
         # add set to equivalences list
-        self.equivalences.append(new_set)
+        self.equivalences.append(lbl)
 
         pass
     pass
@@ -40,17 +31,62 @@ class Linked:
     #
     # neighbors     - set containing neighbor labels found
     #----------------------------------
-    def union(self, neighbors):
-        # prepare set of labels
-        new_set = set()
+    def union(self, labelx, labely):
+        lblx = self.equivalences[labelx-1]
+        lbly = self.equivalences[labely-1]
 
-        # build new set with neighbor elements
-        for n in neighbors:
-            new_set.update(self.equivalences[n-1])
+        self.link(self.find_set(lblx), self.find_set(lbly))
+    pass
 
-        # add set to all identified labels
-        for n in new_set:
-            self.equivalences[n-1].update(new_set)
+    #----------------------------------
+    # links 2 labels
+    #
+    # labelx - label object to be linked with labely
+    # labely - label object to be linked with labelx
+    #----------------------------------
+    def link(self, labelx, labely):
+
+        if labelx.get_rank() > labely.get_rank():
+            labely.set_parent(labelx)
+            pass
+        else:
+            labelx.set_parent(labely)
+
+            if labelx.get_rank() == labely.get_rank():
+                labely.set_rank(labely.get_rank() + 1)
+                pass
+            pass
+        pass
+    pass
+
+    #----------------------------------
+    # Finds the root of the label
+    #
+    # label_to_find - label to be found
+    # return        - parent of label to be found
+    #----------------------------------
+    def find_set(self, label_to_find):
+        
+        if label_to_find != label_to_find.get_parent():
+            label_to_find.set_parent(self.find_set(label_to_find.get_parent()))
+                                     
+        return label_to_find.get_parent()
+                                     
+        pass
+    pass
+
+    #----------------------------------
+    # Finds equivalent label
+    #
+    # label_to_find - label to be found
+    # return        - label
+    #----------------------------------
+    def find_minimum(self, label_to_find):
+
+        lbl = self.find_set(self.equivalences[label_to_find - 1])
+                                     
+        return lbl.get_parent()
+                                     
         pass
     pass
 
